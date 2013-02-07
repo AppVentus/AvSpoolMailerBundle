@@ -1,0 +1,20 @@
+imports:
+    - { resource: mailer.xml }
+    - { resource: services.yml }
+
+
+white_october_swift_mailer_db:
+    entity_class: AppVentus\Awesome\SpoolMailerBundle\Entity\Mail
+
+spool_mailer_bundle:
+    contact_addresses:
+      admin:
+        address: admin@appventus.com
+        name: "AppVentus"
+      noreply:
+        address: noreply@appventus.com
+        name: "AppVentus"
+
+swiftmailer:
+    spool:
+        type: db

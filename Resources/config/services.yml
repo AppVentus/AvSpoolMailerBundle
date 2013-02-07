@@ -1,0 +1,6 @@
+services:	
+	instant_mailer:
+	    class: AppVentus\Awesome\SpoolMailerBundle\Mailer\InstantMailer
+	    arguments:
+	        - @doctrine.orm.entity_manager
+	        - @?swiftmailer.transport.real
