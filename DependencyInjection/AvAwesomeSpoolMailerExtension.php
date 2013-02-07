@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class JobBoardExtension extends Extension
+class AvAwesomeSpoolMailerExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -22,8 +22,8 @@ class JobBoardExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
         $container->setParameter(
              'contact_addresses_admin_address',
               $config['contact_addresses']['admin']['address']
@@ -42,5 +42,13 @@ class JobBoardExtension extends Extension
          );
  
 
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlias()
+    {
+        return "av_awesome_spool_mailer";
     }
 }

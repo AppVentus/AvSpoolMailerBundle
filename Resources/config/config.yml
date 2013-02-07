@@ -6,7 +6,7 @@ imports:
 white_october_swift_mailer_db:
     entity_class: AppVentus\Awesome\SpoolMailerBundle\Entity\Mail
 
-spool_mailer_bundle:
+av_awesome_spool_mailer:
     contact_addresses:
       admin:
         address: admin@appventus.com

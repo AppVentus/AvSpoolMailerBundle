@@ -2,7 +2,6 @@
 
 namespace AppVentus\Awesome\SpoolMailerBundle\Mailer;
 
-use AppVentus\JobBoardBundle\Entity\Mail;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 
 /**
@@ -12,10 +11,21 @@ class InstantMailer extends \Swift_Mailer
 {
     protected $mailer;
 
-    public function __construct($em, $transport)
+    /**
+     * @var string
+     */
+    protected $entityClass;
+    public function __construct($em, $transport, $entityClass)
     {
 
     	$this->em = $em;
+
+        $obj = new $entityClass;
+        if (!$obj instanceof EmailInterface) {
+            throw new \InvalidArgumentException("The entity class '{$entityClass}'' does not extend from EmailInterface");
+        }
+
+        $this->entityClass = $entityClass;
     	parent::__construct($transport);
     }
 
@@ -29,7 +39,8 @@ class InstantMailer extends \Swift_Mailer
             ->setBody($message->getBody(), 'text/html')
             ;
             $newMessage->setReplyTo($message->getReplyTo());
-        $mail = new Mail;
+
+        $mail = new $this->entityClass;
         $mail->setMessage($newMessage);
         $mail->setType('instant');
         $mail->setCreationDate(new \DateTime());
