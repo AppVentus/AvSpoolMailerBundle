@@ -25,22 +25,26 @@ class AvAwesomeSpoolMailerExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $container->setParameter(
-             'contact_addresses_admin_address',
-              $config['contact_addresses']['admin']['address']
+            'av_awesome_spool_mailer.contact_addresses',
+            $config['contact_addresses']
          );
         $container->setParameter(
-             'contact_addresses_noreply_address',
-              $config['contact_addresses']['noreply']['address']
+            'contact_addresses_admin_address',
+            $config['contact_addresses']['admin']['address']
          );
         $container->setParameter(
-             'contact_addresses_admin_name',
-              $config['contact_addresses']['admin']['name']
+            'contact_addresses_noreply_address',
+            $config['contact_addresses']['noreply']['address']
          );
         $container->setParameter(
-             'contact_addresses_noreply_name',
-              $config['contact_addresses']['noreply']['name']
+            'contact_addresses_admin_name',
+            $config['contact_addresses']['admin']['name']
          );
- 
+        $container->setParameter(
+            'contact_addresses_noreply_name',
+            $config['contact_addresses']['noreply']['name']
+         );
+
 
     }
 
