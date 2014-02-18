@@ -26,7 +26,7 @@ class FosInstantMailer implements MailerInterface
 
     public function sendConfirmationEmailMessage(UserInterface $user)
     {
-        $subject = "Agissons pour l'emploi - Confirmation d'inscription";
+        $subject = "Confirmation d'inscription";
         $template = $this->parameters['confirmation.template'];
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
         $rendered = $this->templating->render($template, array(
@@ -38,7 +38,7 @@ class FosInstantMailer implements MailerInterface
 
     public function sendResettingEmailMessage(UserInterface $user)
     {
-        $subject = "Agissons pour l'emploi - Re-définition du mot de passe";
+        $subject = "Re-définition du mot de passe";
         $template = $this->parameters['resetting.template'];
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true);
         $rendered = $this->templating->render($template, array(
@@ -53,7 +53,7 @@ class FosInstantMailer implements MailerInterface
         // Render the email, use the first line as the subject, and the rest as the body
         $renderedLines = explode("\n", trim($renderedTemplate));
         if($subject == null){
-            $subject = $renderedLines[0];  
+            $subject = $renderedLines[0];
         }
         $body = implode("\n", array_slice($renderedLines, 1));
 
