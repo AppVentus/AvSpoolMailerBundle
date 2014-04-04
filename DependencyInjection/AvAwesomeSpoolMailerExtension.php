@@ -28,24 +28,35 @@ class AvAwesomeSpoolMailerExtension extends Extension
             'av_awesome_spool_mailer.contact_addresses',
             $config['contact_addresses']
          );
-        $container->setParameter(
-            'contact_addresses_admin_address',
-            $config['contact_addresses']['admin']['address']
-         );
-        $container->setParameter(
-            'contact_addresses_noreply_address',
-            $config['contact_addresses']['noreply']['address']
-         );
-        $container->setParameter(
-            'contact_addresses_admin_name',
-            $config['contact_addresses']['admin']['name']
-         );
-        $container->setParameter(
-            'contact_addresses_noreply_name',
-            $config['contact_addresses']['noreply']['name']
-         );
 
-
+        //Generate a parameter for each kind of contact
+        //example :
+        //
+        //av_awesome_spool_mailer:
+        //    contact_addresses:
+        //      sales_manager:                  #generated parameter : contact_addresses_sales_manager_address
+        //        address: salesman@you.com
+        //        name: Mitch
+        //      marketing_department:           #generated parameter : contact_addresses_marketing_department_address
+        //        address: marketing@you.com
+        //        name: Marketing Dept.
+        //      it_crowd:                       #generated parameter : contact_addresses_it_crowd_address
+        //        address: it@you.com
+        //        name: The IT guy
+        //      noreply:                        #generated parameter : contact_addresses_noreply_address
+        //        address: noreply@you.com
+        //        name: Do not reply
+        //
+        foreach ($config['contact_addresses'] as $key => $value) {
+            $container->setParameter(
+                'contact_addresses_'.$key.'_address',
+                $value['address']
+             );
+            $container->setParameter(
+                'contact_addresses_'.$key.'_name',
+                $value['name']
+             );
+        }
     }
 
     /**
