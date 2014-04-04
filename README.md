@@ -24,6 +24,14 @@ Always in config.yml, overwrite the sender mail config:
           noreply:
             address: [yours]
             name: [yours]
+          ...
+
+Add your owns, each row inside contact addresses will automatically be accessible in the parameter bag following this scheme :
+
+example :
+
+    contact_addresses_**KEY**_address
+
 
 3) Usage :
 

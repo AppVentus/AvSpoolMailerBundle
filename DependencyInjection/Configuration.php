@@ -29,19 +29,15 @@ class Configuration implements ConfigurationInterface
         ->children()
 
             ->arrayNode('contact_addresses')
-            ->addDefaultsIfNotSet()
+                ->useAttributeAsKey(true)
+                ->prototype('array')
                 ->children()
-                    ->arrayNode('admin')
-                        ->children()
-                            ->scalarNode('address')->end()
-                            ->scalarNode('name')->end()->end()->end()
-                    ->arrayNode('noreply')
-                        ->children()
-                            ->scalarNode('address')->end()
-                            ->scalarNode('name')->end()->end()->end()
+                    ->scalarNode('address')->end()
+                    ->scalarNode('name')->end()
                 ->end()
-            ->end();
-				
+            ->end()
+        ->end();
+
         return $treeBuilder;
     }
 }
