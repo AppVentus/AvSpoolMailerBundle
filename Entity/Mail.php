@@ -5,13 +5,13 @@ use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- *  AppVentus\Awesome\SpoolMailerBundle\Entity\Mail
+ * AppVentus\Awesome\SpoolMailerBundle\Entity\Mail
  *
  * @ORM\Table(name="mail")
  * @ORM\Entity
  */
-class Mail implements EmailInterface{
-
+class Mail implements EmailInterface
+{
 
     /**
      * @var integer $id
@@ -45,6 +45,12 @@ class Mail implements EmailInterface{
      * @ORM\Column(name="recipient", type="string", length=255, nullable=true)
      */
     private $to;
+    /**
+     * @var string $replyTo
+     *
+     * @ORM\Column(name="reply_to", type="string", length=255, nullable=true)
+     */
+    private $replyTo;
     /**
      * @var string $subject
      *
@@ -82,6 +88,7 @@ class Mail implements EmailInterface{
      * Set sendDate
      *
      * @param string $sendDate
+     *
      * @return Event
      */
     public function setSendDate($sendDate)
@@ -102,6 +109,7 @@ class Mail implements EmailInterface{
      * Set creationDate
      *
      * @param string $creationDate
+     *
      * @return Event
      */
     public function setCreationDate($creationDate)
@@ -122,6 +130,7 @@ class Mail implements EmailInterface{
      * Set type
      *
      * @param string $type
+     *
      * @return Event
      */
     public function setType($type)
@@ -139,63 +148,228 @@ class Mail implements EmailInterface{
         return $this->type;
     }
 
+    /**
+     * Set message
+     *
+     * @param string $message The message to send
+     *
+     * @return Mail
+     */
+    public function setMessage($message)
+    {
+        $this->setSubject($message->getSubject());
+        $this->setBody($message->getBody());
+        $this->setTo(serialize($message->getTo()));
+        $this->setFrom(serialize($message->getFrom()));
+        if ($message->getReplyTo()) {
+            $this->setReplyTo(serialize($message->getReplyTo()));
+        } else {
+            $this->setReplyTo(serialize($message->getTo()));
+        }
+        $this->setContentType($message->getHeaders()->get('Content-Type')->getValue());
 
-    public function setMessage($message){
-    	$this->setSubject($message->getSubject());
-    	$this->setBody($message->getBody());
-    	$this->setTo(serialize($message->getTo()));
-    	$this->setFrom(serialize($message->getFrom()));
-    	$this->setContentType($message->getHeaders()->get('Content-Type')->getValue());
+        return $this;
     }
-    public function getMessage(){
 
-    	$message = \Swift_Message::newInstance()
+    /**
+     * Get message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+
+        $message = \Swift_Message::newInstance()
             ->setSubject($this->getSubject())
             ->setFrom(unserialize($this->getFrom()))
             ->setTo(unserialize($this->getTo()))
-            ->setBody($this->getBody(), $this->getContentType())
-            ;
+            ->setReplyTo(unserialize($this->getReplyTo()))
+            ->setBody($this->getBody(), $this->getContentType());
+
         return $message;
     }
 
-    public function getContentType(){
-    	return $this->contentType;
-    }
-    public function setContentType($contentType){
-    	$this->contentType = $contentType;
-    }
-    public function getFrom(){
-    	return $this->from;
-    }
-    public function setFrom($from){
-    	$this->from = $from;
-    }
-    public function getTo(){
-    	return $this->to;
-    }
-    public function setTo($to){
-    	$this->to = $to;
-    }
-    public function getSubject(){
-    	return $this->subject;
-    }
-    public function setSubject($subject){
-    	$this->subject = $subject;
-    }
-    public function getBody(){
-    	return $this->body;
-    }
-    public function setBody($body){
-    	$this->body = $body;
+
+
+    /**
+     * get ContentType
+     *
+     * @return string
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
     }
 
-    public function getStatus(){
-    	return $this->status;
+
+    /**
+     * set ContentType
+     *
+     * @param string $contentType The contentType to define
+     *
+     * @return Mail
+     */
+    public function setContentType($contentType)
+    {
+        $this->contentType = $contentType;
+
+        return $this;
     }
-    public function setStatus($status){
-    	$this->status = $status;
+
+
+    /**
+     * get From
+     *
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+
+    /**
+     * set From
+     *
+     * @param string $from The author's email
+     *
+     * @return Mail
+     */
+    public function setFrom($from)
+    {
+        $this->from = $from;
+
+        return $this;
+    }
+
+
+    /**
+     * get To
+     *
+     * @return string
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+
+    /**
+     * set To
+     *
+     * @param string $to The email to send
+     *
+     * @return Mail
+     */
+    public function setTo($to)
+    {
+        $this->to = $to;
+
+        return $this;
+    }
+
+    /**
+     * get ReplyTo email
+     *
+     * @return string
+     */
+    public function getReplyTo()
+    {
+        return $this->replyTo;
+    }
+
+
+    /**
+     * set ReplyTo
+     *
+     * @param string $replyTo The email to reply
+     *
+     * @return Mail
+     */
+    public function setReplyTo($replyTo)
+    {
+        $this->replyTo = $replyTo;
+
+        return $this;
+    }
+
+
+    /**
+     * get Subject
+     *
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+
+    /**
+     * set Subject
+     *
+     * @param string $subject The Subject to define
+     *
+     * @return Mail
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+
+    /**
+     * get Body
+     *
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+
+    /**
+     * set Body
+     *
+     * @param string $body The Body to define
+     *
+     * @return Mail
+     */
+    public function setBody($body)
+    {
+        $this->body = $body;
+
+        return $this;
+    }
+
+
+
+    /**
+     * get Status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+
+    /**
+     * set Status
+     *
+     * @param string $status The Status to define
+     *
+     * @return Mail
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
     }
 
 }
-
-?>
