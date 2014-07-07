@@ -7,11 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  *  AppVentus\Awesome\SpoolMailerBundle\Entity\Mail
  *
- * @ORM\Table()
+ * @ORM\Table(name="mail")
  * @ORM\Entity
  */
 class Mail implements EmailInterface{
-    
+
 
     /**
      * @var integer $id
@@ -92,7 +92,7 @@ class Mail implements EmailInterface{
     /**
      * Get start_date
      *
-     * @return string 
+     * @return string
      */
     public function getSendDate()
     {
@@ -112,7 +112,7 @@ class Mail implements EmailInterface{
     /**
      * Get start_date
      *
-     * @return string 
+     * @return string
      */
     public function getCreationDate()
     {
@@ -132,14 +132,14 @@ class Mail implements EmailInterface{
     /**
      * Get start_date
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
         return $this->type;
     }
 
-   
+
     public function setMessage($message){
     	$this->setSubject($message->getSubject());
     	$this->setBody($message->getBody());
@@ -195,7 +195,7 @@ class Mail implements EmailInterface{
     public function setStatus($status){
     	$this->status = $status;
     }
-    
+
 }
 
 ?>
