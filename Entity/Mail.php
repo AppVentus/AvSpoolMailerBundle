@@ -34,21 +34,21 @@ class Mail implements EmailInterface
      */
     private $body;
     /**
-     * @var string $from
+     * @var array $from
      *
-     * @ORM\Column(name="sender", type="string", length=255, nullable=true)
+     * @ORM\Column(name="sender", type="array", length=255, nullable=true)
      */
     private $from;
     /**
-     * @var string $to
+     * @var array $to
      *
-     * @ORM\Column(name="recipient", type="string", length=255, nullable=true)
+     * @ORM\Column(name="recipient", type="array", length=255, nullable=true)
      */
     private $to;
     /**
-     * @var string $replyTo
+     * @var array $replyTo
      *
-     * @ORM\Column(name="reply_to", type="string", length=255, nullable=true)
+     * @ORM\Column(name="reply_to", type="array", length=255, nullable=true)
      */
     private $replyTo;
     /**
@@ -81,8 +81,6 @@ class Mail implements EmailInterface
      * @ORM\Column(name="type", type="string", nullable=true)
      */
     protected $type;
-
-
 
     /**
      * Set sendDate
@@ -159,12 +157,12 @@ class Mail implements EmailInterface
     {
         $this->setSubject($message->getSubject());
         $this->setBody($message->getBody());
-        $this->setTo(serialize($message->getTo()));
-        $this->setFrom(serialize($message->getFrom()));
+        $this->setTo($message->getTo());
+        $this->setFrom($message->getFrom());
         if ($message->getReplyTo()) {
-            $this->setReplyTo(serialize($message->getReplyTo()));
+            $this->setReplyTo($message->getReplyTo());
         } else {
-            $this->setReplyTo(serialize($message->getTo()));
+            $this->setReplyTo($message->getTo());
         }
         $this->setContentType($message->getHeaders()->get('Content-Type')->getValue());
 
@@ -181,15 +179,13 @@ class Mail implements EmailInterface
 
         $message = \Swift_Message::newInstance()
             ->setSubject($this->getSubject())
-            ->setFrom(unserialize($this->getFrom()))
-            ->setTo(unserialize($this->getTo()))
-            ->setReplyTo(unserialize($this->getReplyTo()))
+            ->setFrom($this->getFrom())
+            ->setTo($this->getTo())
+            ->setReplyTo($this->getReplyTo())
             ->setBody($this->getBody(), $this->getContentType());
 
         return $message;
     }
-
-
 
     /**
      * get ContentType
@@ -200,7 +196,6 @@ class Mail implements EmailInterface
     {
         return $this->contentType;
     }
-
 
     /**
      * set ContentType
@@ -216,7 +211,6 @@ class Mail implements EmailInterface
         return $this;
     }
 
-
     /**
      * get From
      *
@@ -226,7 +220,6 @@ class Mail implements EmailInterface
     {
         return $this->from;
     }
-
 
     /**
      * set From
@@ -242,7 +235,6 @@ class Mail implements EmailInterface
         return $this;
     }
 
-
     /**
      * get To
      *
@@ -252,7 +244,6 @@ class Mail implements EmailInterface
     {
         return $this->to;
     }
-
 
     /**
      * set To
@@ -278,7 +269,6 @@ class Mail implements EmailInterface
         return $this->replyTo;
     }
 
-
     /**
      * set ReplyTo
      *
@@ -293,7 +283,6 @@ class Mail implements EmailInterface
         return $this;
     }
 
-
     /**
      * get Subject
      *
@@ -303,7 +292,6 @@ class Mail implements EmailInterface
     {
         return $this->subject;
     }
-
 
     /**
      * set Subject
@@ -319,7 +307,6 @@ class Mail implements EmailInterface
         return $this;
     }
 
-
     /**
      * get Body
      *
@@ -329,7 +316,6 @@ class Mail implements EmailInterface
     {
         return $this->body;
     }
-
 
     /**
      * set Body
@@ -345,8 +331,6 @@ class Mail implements EmailInterface
         return $this;
     }
 
-
-
     /**
      * get Status
      *
@@ -356,7 +340,6 @@ class Mail implements EmailInterface
     {
         return $this->status;
     }
-
 
     /**
      * set Status
