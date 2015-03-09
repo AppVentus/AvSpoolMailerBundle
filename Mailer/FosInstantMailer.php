@@ -2,8 +2,6 @@
 
 namespace AppVentus\Awesome\SpoolMailerBundle\Mailer;
 
-use AppVentus\JobBoardBundle\Entity\Mail;
-use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
 use FOS\UserBundle\Model\UserInterface;
@@ -48,11 +46,11 @@ class FosInstantMailer implements MailerInterface
         $this->sendEmailMessage($rendered, $this->parameters['from_email']['resetting'], $user->getEmail(), $subject);
     }
 
-    protected function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail, $subject = null)
+    public function sendEmailMessage($renderedTemplate, $fromEmail, $toEmail, $subject = null)
     {
         // Render the email, use the first line as the subject, and the rest as the body
         $renderedLines = explode("\n", trim($renderedTemplate));
-        if($subject == null){
+        if ($subject == null) {
             $subject = $renderedLines[0];
         }
         $body = implode("\n", array_slice($renderedLines, 1));
