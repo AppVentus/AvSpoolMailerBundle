@@ -6,11 +6,14 @@ services:
             - @?swiftmailer.transport.real
             - %white_october.swiftmailer_db.spool.entity_class%
 
-
-    fos_user.mailer.default:
+    fos_user.mailer.instant:
         class: "AppVentus\Awesome\SpoolMailerBundle\Mailer\FosInstantMailer"
         arguments:
             - "@instant_mailer"
             - "@router"
             - "@templating"
+            - "@twig"
             - { confirmation.template: %fos_user.registration.confirmation.template%, resetting.template: %fos_user.resetting.email.template%, from_email: { confirmation: %fos_user.registration.confirmation.from_email%, resetting: %fos_user.resetting.email.from_email% }}
+
+    fos_user.mailer.default:
+        alias: fos_user.mailer.instant
