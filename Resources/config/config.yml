@@ -1,7 +1,5 @@
 imports:
-    - { resource: mailer.xml }
     - { resource: services.yml }
-
 
 white_october_swift_mailer_db:
     entity_class: AppVentus\Awesome\SpoolMailerBundle\Entity\Mail

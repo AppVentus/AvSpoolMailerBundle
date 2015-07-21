@@ -12,20 +12,29 @@ class FosInstantMailer implements MailerInterface
     protected $mailer;
     protected $router;
     protected $templating;
+    protected $twig;
     protected $parameters;
 
-    public function __construct($mailer, RouterInterface $router, EngineInterface $templating, array $parameters)
+    public function __construct($mailer, RouterInterface $router, EngineInterface $templating, \Twig_Environment $twig, array $parameters)
     {
         $this->mailer = $mailer;
         $this->router = $router;
         $this->templating = $templating;
+        $this->twig = $twig;
         $this->parameters = $parameters;
     }
 
     public function sendConfirmationEmailMessage(UserInterface $user)
     {
-        $subject = "Confirmation d'inscription";
+
         $template = $this->parameters['confirmation.template'];
+        $loadTemplate = $this->twig->loadTemplate($template);
+        $subject = $loadTemplate->renderBlock('subject', array());
+
+        if(!$subject) {
+            $subject = "Confirmation d'inscription";
+        }
+
         $url = $this->router->generate('fos_user_registration_confirm', array('token' => $user->getConfirmationToken()), true);
         $rendered = $this->templating->render($template, array(
             'user' => $user,
@@ -36,8 +45,15 @@ class FosInstantMailer implements MailerInterface
 
     public function sendResettingEmailMessage(UserInterface $user)
     {
-        $subject = "Re-définition du mot de passe";
+
         $template = $this->parameters['resetting.template'];
+        $loadTemplate = $this->twig->loadTemplate($template);
+        $subject = $loadTemplate->renderBlock('subject', array());
+
+        if(!$subject) {
+            $subject = "Re-définition du mot de passe";
+        }
+
         $url = $this->router->generate('fos_user_resetting_reset', array('token' => $user->getConfirmationToken()), true);
         $rendered = $this->templating->render($template, array(
             'user' => $user,
