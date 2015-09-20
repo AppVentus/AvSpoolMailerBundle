@@ -1,6 +1,8 @@
 <?php
 namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Mail implements EmailInterface
 {
+    use TimestampableEntity;
 
     /**
      * @var integer $id
@@ -21,60 +24,70 @@ class Mail implements EmailInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
     /**
      * @var int $status
      *
      * @ORM\Column(name="status", type="integer")
      */
     private $status;
+
     /**
      * @var string $body
      *
      * @ORM\Column(name="mail_body", type="text")
      */
     private $body;
+
     /**
      * @var array $from
      *
      * @ORM\Column(name="sender", type="array", length=255, nullable=true)
      */
     private $from;
+
     /**
      * @var array $to
      *
      * @ORM\Column(name="recipient", type="array", length=255, nullable=true)
      */
     private $to;
+
     /**
      * @var array $replyTo
      *
      * @ORM\Column(name="reply_to", type="array", length=255, nullable=true)
      */
     private $replyTo;
+
+    /**
+     * @var array $attachments
+     *
+     * @ORM\Column(name="attachments", type="array", nullable=true)
+     */
+    private $attachments;
+
     /**
      * @var string $subject
      *
      * @ORM\Column(name="subject", type="text", nullable=true)
      */
     private $subject;
+
     /**
      * @var string $subject
      *
      * @ORM\Column(name="content_type", type="text", nullable=true)
      */
     private $contentType;
+
     /**
-     * @var datetime $send_date
+     * @var \DateTime $send_date
      *
      * @ORM\Column(name="send_date", type="datetime", nullable=true)
      */
     protected $sendDate;
-    /**
-     * @var datetime $creation_date
-     *
-     * @ORM\Column(name="creation_date", type="datetime", nullable=true)
-     */
-    protected $creationDate;
+
     /**
      * @var string $type
      *
@@ -103,27 +116,7 @@ class Mail implements EmailInterface
     {
         return $this->sendDate;
     }
-    /**
-     * Set creationDate
-     *
-     * @param string $creationDate
-     *
-     * @return Event
-     */
-    public function setCreationDate($creationDate)
-    {
-        $this->creationDate = $creationDate;
-    }
 
-    /**
-     * Get start_date
-     *
-     * @return string
-     */
-    public function getCreationDate()
-    {
-        return $this->creationDate;
-    }
     /**
      * Set type
      *
@@ -182,7 +175,11 @@ class Mail implements EmailInterface
             ->setFrom($this->getFrom())
             ->setTo($this->getTo())
             ->setReplyTo($this->getReplyTo())
-            ->setBody($this->getBody(), $this->getContentType());
+            ->setBody($this->getBody(), 'text/html');
+
+        foreach ($this->attachments as $attachment) {
+            $message->attach($attachment);
+        }
 
         return $message;
     }
@@ -351,6 +348,34 @@ class Mail implements EmailInterface
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param array $attachments
+     */
+    public function setAttachments(array $attachments)
+    {
+        $this->attachments = $attachments;
+
+        return $this;
+    }
+
+    /**
+     * @param string $attachment
+     */
+    public function addAttachment($attachment)
+    {
+        $this->attachments[] = $attachment;
 
         return $this;
     }
