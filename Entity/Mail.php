@@ -65,7 +65,7 @@ class Mail implements EmailInterface
      *
      * @ORM\Column(name="attachments", type="array", nullable=true)
      */
-    private $attachments;
+    private $attachments = [];
 
     /**
      * @var string $subject
