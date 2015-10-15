@@ -43,7 +43,6 @@ class InstantMailer extends \Swift_Mailer
         $mail = new $this->entityClass;
         $mail->setMessage($newMessage);
         $mail->setType('instant');
-        $mail->setCreationDate(new \DateTime());
         $mail->setStatus(EmailInterface::STATUS_COMPLETE);
         $this->em->persist($mail);
         $this->em->flush();
