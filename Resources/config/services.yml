@@ -6,6 +6,12 @@ services:
             - @?swiftmailer.transport.real
             - %white_october.swiftmailer_db.spool.entity_class%
 
+    spool_mailer:
+        class: AppVentus\Awesome\SpoolMailerBundle\Mailer\SpoolMailer
+        arguments:
+            - @?swiftmailer.transport.real
+            - @white_october.swiftmailer_db.spool
+
     fos_user.mailer.instant:
         class: "AppVentus\Awesome\SpoolMailerBundle\Mailer\FosInstantMailer"
         arguments:
