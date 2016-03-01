@@ -36,7 +36,7 @@ example :
 3) Usage :
 
 You can spool message in db with :
-    $this->get('white_october.swiftmailer_db.spool')->queueMessage($message);
+    $this->get('spool_mailer')->queueMessage($message);
 
 You can send instant email in controller with :
     $this->get('instant_mailer')->send($message);
