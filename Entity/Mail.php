@@ -52,6 +52,18 @@ class Mail implements EmailInterface
      * @ORM\Column(name="recipient", type="array", length=255, nullable=true)
      */
     private $to;
+    /**
+     * @var array $cc
+     *
+     * @ORM\Column(name="cc", type="array", length=255, nullable=true)
+     */
+    private $cc;
+    /**
+     * @var array $bcc
+     *
+     * @ORM\Column(name="bcc", type="array", length=255, nullable=true)
+     */
+    private $bcc;
 
     /**
      * @var array $replyTo
@@ -151,6 +163,8 @@ class Mail implements EmailInterface
         $this->setSubject($message->getSubject());
         $this->setBody($message->getBody());
         $this->setTo($message->getTo());
+        $this->setCc($message->getCc());
+        $this->setBcc($message->getBcc());
         $this->setFrom($message->getFrom());
         if ($message->getReplyTo()) {
             $this->setReplyTo($message->getReplyTo());
@@ -174,6 +188,8 @@ class Mail implements EmailInterface
             ->setSubject($this->getSubject())
             ->setFrom($this->getFrom())
             ->setTo($this->getTo())
+            ->setCc($this->getCc())
+            ->setBcc($this->getBcc())
             ->setReplyTo($this->getReplyTo())
             ->setBody($this->getBody(), 'text/html');
 
@@ -255,6 +271,39 @@ class Mail implements EmailInterface
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function getCc()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @param array $cc
+     */
+    public function setCc($cc)
+    {
+        $this->cc = $cc;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBcc()
+    {
+        return $this->bcc;
+    }
+
+    /**
+     * @param array $bcc
+     */
+    public function setBcc($bcc)
+    {
+        $this->bcc = $bcc;
+    }
+
 
     /**
      * get ReplyTo email
