@@ -1,13 +1,13 @@
 <?php
+
 namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AppVentus\Awesome\SpoolMailerBundle\Entity\Mail
+ * AppVentus\Awesome\SpoolMailerBundle\Entity\Mail.
  *
  * @ORM\Table(name="mail")
  * @ORM\Entity
@@ -17,7 +17,7 @@ class Mail implements EmailInterface
     use TimestampableEntity;
 
     /**
-     * @var integer $id
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -26,89 +26,89 @@ class Mail implements EmailInterface
     private $id;
 
     /**
-     * @var int $status
+     * @var int
      *
      * @ORM\Column(name="status", type="integer")
      */
     private $status;
 
     /**
-     * @var string $body
+     * @var string
      *
      * @ORM\Column(name="mail_body", type="text")
      */
     private $body;
 
     /**
-     * @var array $from
+     * @var array
      *
-     * @ORM\Column(name="sender", type="array", length=255, nullable=true)
+     * @ORM\Column(name="sender", type="array", nullable=true)
      */
     private $from;
 
     /**
-     * @var array $to
+     * @var array
      *
-     * @ORM\Column(name="recipient", type="array", length=255, nullable=true)
+     * @ORM\Column(name="recipient", type="array", nullable=true)
      */
     private $to;
     /**
-     * @var array $cc
+     * @var array
      *
-     * @ORM\Column(name="cc", type="array", length=255, nullable=true)
+     * @ORM\Column(name="cc", type="array", nullable=true)
      */
     private $cc;
     /**
-     * @var array $bcc
+     * @var array
      *
-     * @ORM\Column(name="bcc", type="array", length=255, nullable=true)
+     * @ORM\Column(name="bcc", type="array", nullable=true)
      */
     private $bcc;
 
     /**
-     * @var array $replyTo
+     * @var array
      *
      * @ORM\Column(name="reply_to", type="array", length=255, nullable=true)
      */
     private $replyTo;
 
     /**
-     * @var array $attachments
+     * @var array
      *
      * @ORM\Column(name="attachments", type="array", nullable=true)
      */
     private $attachments = [];
 
     /**
-     * @var string $subject
+     * @var string
      *
      * @ORM\Column(name="subject", type="text", nullable=true)
      */
     private $subject;
 
     /**
-     * @var string $subject
+     * @var string
      *
      * @ORM\Column(name="content_type", type="text", nullable=true)
      */
     private $contentType;
 
     /**
-     * @var \DateTime $send_date
+     * @var \DateTime
      *
      * @ORM\Column(name="send_date", type="datetime", nullable=true)
      */
     protected $sendDate;
 
     /**
-     * @var string $type
+     * @var string
      *
      * @ORM\Column(name="type", type="string", nullable=true)
      */
     protected $type;
 
     /**
-     * Set sendDate
+     * Set sendDate.
      *
      * @param string $sendDate
      *
@@ -120,7 +120,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * Get start_date
+     * Get start_date.
      *
      * @return string
      */
@@ -130,7 +130,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
      *
@@ -142,7 +142,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * Get start_date
+     * Get start_date.
      *
      * @return string
      */
@@ -152,7 +152,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * Set message
+     * Set message.
      *
      * @param string $message The message to send
      *
@@ -177,13 +177,12 @@ class Mail implements EmailInterface
     }
 
     /**
-     * Get message
+     * Get message.
      *
      * @return string
      */
     public function getMessage()
     {
-
         $message = \Swift_Message::newInstance()
             ->setSubject($this->getSubject())
             ->setFrom($this->getFrom())
@@ -201,7 +200,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * get ContentType
+     * get ContentType.
      *
      * @return string
      */
@@ -211,7 +210,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * set ContentType
+     * set ContentType.
      *
      * @param string $contentType The contentType to define
      *
@@ -225,7 +224,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * get From
+     * get From.
      *
      * @return string
      */
@@ -235,7 +234,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * set From
+     * set From.
      *
      * @param string $from The author's email
      *
@@ -249,7 +248,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * get To
+     * get To.
      *
      * @return string
      */
@@ -259,7 +258,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * set To
+     * set To.
      *
      * @param string $to The email to send
      *
@@ -304,9 +303,8 @@ class Mail implements EmailInterface
         $this->bcc = $bcc;
     }
 
-
     /**
-     * get ReplyTo email
+     * get ReplyTo email.
      *
      * @return string
      */
@@ -316,7 +314,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * set ReplyTo
+     * set ReplyTo.
      *
      * @param string $replyTo The email to reply
      *
@@ -330,7 +328,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * get Subject
+     * get Subject.
      *
      * @return string
      */
@@ -340,7 +338,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * set Subject
+     * set Subject.
      *
      * @param string $subject The Subject to define
      *
@@ -354,7 +352,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * get Body
+     * get Body.
      *
      * @return string
      */
@@ -364,7 +362,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * set Body
+     * set Body.
      *
      * @param string $body The Body to define
      *
@@ -378,7 +376,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * get Status
+     * get Status.
      *
      * @return string
      */
@@ -388,7 +386,7 @@ class Mail implements EmailInterface
     }
 
     /**
-     * set Status
+     * set Status.
      *
      * @param string $status The Status to define
      *
@@ -428,5 +426,4 @@ class Mail implements EmailInterface
 
         return $this;
     }
-
 }
