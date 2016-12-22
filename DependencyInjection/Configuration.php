@@ -27,7 +27,9 @@ class Configuration implements ConfigurationInterface
 
 
         ->children()
-
+            ->scalarNode('attachments_directory')
+            ->defaultValue('uploads/mail_attachments')
+            ->end()
             ->arrayNode('contact_addresses')
                 ->useAttributeAsKey(true)
                 ->prototype('array')

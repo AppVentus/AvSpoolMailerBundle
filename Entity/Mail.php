@@ -2,6 +2,7 @@
 
 namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -73,11 +74,11 @@ class Mail implements EmailInterface
     private $replyTo;
 
     /**
-     * @var array
+     * @var Attachment []
      *
-     * @ORM\Column(name="attachments", type="array", nullable=true)
+     * @ORM\OneToMany(targetEntity="AppVentus\Awesome\SpoolMailerBundle\Entity\Attachment", mappedBy="mail", cascade={"persist", "remove"})
      */
-    private $attachments = [];
+    private $attachments;
 
     /**
      * @var string
@@ -106,6 +107,11 @@ class Mail implements EmailInterface
      * @ORM\Column(name="type", type="string", nullable=true)
      */
     protected $type;
+
+    public function __construct()
+    {
+        $this->attachments = new ArrayCollection();
+    }
 
     /**
      * Set sendDate.
@@ -193,7 +199,10 @@ class Mail implements EmailInterface
             ->setBody($this->getBody(), 'text/html');
 
         foreach ($this->attachments as $attachment) {
-            $message->attach($attachment);
+            $message
+                ->attach(\Swift_Attachment::fromPath($attachment->getPathName())
+                    ->setFilename($attachment->getClientOriginalName())
+                );
         }
 
         return $message;
@@ -400,30 +409,36 @@ class Mail implements EmailInterface
     }
 
     /**
-     * @return array
+     * @return \AppVentus\Awesome\SpoolMailerBundle\Entity\Attachment[]
      */
     public function getAttachments()
     {
         return $this->attachments;
     }
 
-    /**
-     * @param array $attachments
-     */
-    public function setAttachments(array $attachments)
+    public function addAttachment($attachment)
     {
-        $this->attachments = $attachments;
-
-        return $this;
+        if($attachment instanceof \Swift_Attachment)
+        {
+            $swiftAttachment = $attachment;
+            $attachment = new Attachment();
+            $attachment->setSwiftAttachment($swiftAttachment);
+        }
+        if ($attachment instanceof Attachment)
+        {
+            $this->attachments->add($attachment);
+            $attachment->setMail($this);
+        }
     }
 
     /**
-     * @param string $attachment
+     * @param \AppVentus\Awesome\SpoolMailerBundle\Entity\Attachment[] $attachments
      */
-    public function addAttachment($attachment)
+    public function setAttachments($attachments)
     {
-        $this->attachments[] = $attachment;
-
-        return $this;
+        foreach ($attachments as $attachment)
+        {
+            $this->addAttachment($attachment);
+        }
     }
 }

@@ -23,3 +23,18 @@ services:
 
     fos_user.mailer.default:
         alias: fos_user.mailer.instant
+
+    spool.attachment_uploader:
+        class: AppVentus\Awesome\SpoolMailerBundle\Utils\AttachmentUploader
+        arguments:
+            - '%spool_mailer.attachments_directory%'
+            - '%kernel.root_dir%'
+            - '@doctrine'
+
+    spool.doctrine_attachment_listener:
+        class: AppVentus\Awesome\SpoolMailerBundle\EventListener\AttachmentUploadListener
+        arguments:
+            - '@spool.attachment_uploader'
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }

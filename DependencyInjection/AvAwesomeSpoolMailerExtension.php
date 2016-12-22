@@ -57,6 +57,7 @@ class AvAwesomeSpoolMailerExtension extends Extension
                 $value['name']
              );
         }
+        $container->setParameter('spool_mailer.attachments_directory', $config['attachments_directory']);
     }
 
     /**
