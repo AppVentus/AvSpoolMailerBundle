@@ -2,9 +2,8 @@
 namespace AppVentus\Awesome\SpoolMailerBundle\Utils;
 
 use AppVentus\Awesome\SpoolMailerBundle\Entity\Attachment;
-use Doctrine\Bundle\DoctrineBundle\Registry as DoctrineRegistry;
+use Doctrine\ORM\EntityManager;
 use Gedmo\Exception\UploadableDirectoryNotFoundException;
-use Swift_FileStream;
 
 /**
  * Class AttachmentUploader
@@ -15,31 +14,29 @@ class AttachmentUploader {
 
     private $targetDir;
     private $rootDir;
-    private $em;
 
     /**
      * AttachmentUploader constructor.
      *
      * @param                                          $targetDir
      * @param                                          $rootDir
-     * @param \Doctrine\Bundle\DoctrineBundle\Registry $registry
      */
-    public function __construct($targetDir, $rootDir, DoctrineRegistry $registry)
+    public function __construct($targetDir, $rootDir)
     {
         $this->targetDir = $targetDir;
         $this->rootDir = $rootDir;
-        $this->em = $registry->getManager();
     }
 
     /**
      * @param \AppVentus\Awesome\SpoolMailerBundle\Entity\Attachment $attachment
+     * @param EntityManager $em
      */
-    public function upload(Attachment $attachment)
+    public function upload(Attachment $attachment, EntityManager $em)
     {
         if ($swiftAttachment = $attachment->getSwiftAttachment())
         {
             /** @var Attachment $duplicatedAttachment */
-            $duplicatedAttachment = $this->em->getRepository(Attachment::class)->findOneBy(['swiftAttachmentId' => $attachment->getSwiftAttachmentId()]);
+            $duplicatedAttachment = $em->getRepository(Attachment::class)->findOneBy(['swiftAttachmentId' => $attachment->getSwiftAttachmentId()]);
             if (!$duplicatedAttachment)
             {
                 $fileName = md5(uniqid('', true)).'_'.$swiftAttachment->getFilename();
