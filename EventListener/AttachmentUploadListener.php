@@ -4,6 +4,7 @@ namespace AppVentus\Awesome\SpoolMailerBundle\EventListener;
 
 use AppVentus\Awesome\SpoolMailerBundle\Entity\Attachment;
 use AppVentus\Awesome\SpoolMailerBundle\Utils\AttachmentUploader;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
@@ -33,7 +34,7 @@ class AttachmentUploadListener
     {
         $entity = $args->getEntity();
 
-        $this->uploadFile($entity);
+        $this->uploadFile($entity, $args->getEntityManager());
     }
 
     /**
@@ -43,19 +44,20 @@ class AttachmentUploadListener
     {
         $entity = $args->getEntity();
 
-        $this->uploadFile($entity);
+        $this->uploadFile($entity, $args->getEntityManager());
     }
 
     /**
      * @param $entity
+     * @param EntityManager $em
      */
-    private function uploadFile($entity)
+    private function uploadFile($entity, EntityManager $em)
     {
         if (!$entity instanceof Attachment) {
             return;
         }
 
-        $this->uploader->upload($entity);
+        $this->uploader->upload($entity, $em);
     }
 
     /**

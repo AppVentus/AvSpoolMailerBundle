@@ -29,7 +29,6 @@ services:
         arguments:
             - '%spool_mailer.attachments_directory%'
             - '%kernel.root_dir%'
-            - '@doctrine'
 
     spool.doctrine_attachment_listener:
         class: AppVentus\Awesome\SpoolMailerBundle\EventListener\AttachmentUploadListener
