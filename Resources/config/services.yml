@@ -2,24 +2,24 @@ services:
     instant_mailer:
         class: AppVentus\Awesome\SpoolMailerBundle\Mailer\InstantMailer
         arguments:
-            - @doctrine.orm.entity_manager
-            - @?swiftmailer.transport.real
-            - %white_october.swiftmailer_db.spool.entity_class%
+            - "@doctrine.orm.entity_manager"
+            - "@?swiftmailer.transport.real"
+            - "%white_october.swiftmailer_db.spool.entity_class%"
 
     spool_mailer:
         class: AppVentus\Awesome\SpoolMailerBundle\Mailer\SpoolMailer
         arguments:
-            - @?swiftmailer.transport.real
-            - @white_october.swiftmailer_db.spool
+            - "@?swiftmailer.transport.real"
+            - "@white_october.swiftmailer_db.spool"
 
     fos_user.mailer.instant:
-        class: "AppVentus\Awesome\SpoolMailerBundle\Mailer\FosInstantMailer"
+        class: AppVentus\Awesome\SpoolMailerBundle\Mailer\FosInstantMailer
         arguments:
             - "@instant_mailer"
             - "@router"
             - "@templating"
             - "@twig"
-            - { confirmation.template: %fos_user.registration.confirmation.template%, resetting.template: %fos_user.resetting.email.template%, from_email: { confirmation: %fos_user.registration.confirmation.from_email%, resetting: %fos_user.resetting.email.from_email% }}
+            - { confirmation.template: "%fos_user.registration.confirmation.template%", resetting.template: "%fos_user.resetting.email.template%", from_email: { confirmation: "%fos_user.registration.confirmation.from_email%", resetting: "%fos_user.resetting.email.from_email%" }}
 
     fos_user.mailer.default:
         alias: fos_user.mailer.instant
