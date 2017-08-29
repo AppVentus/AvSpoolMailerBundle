@@ -1,5 +1,4 @@
-AvSpoolMailerBundle
-===================
+# AvSpoolMailerBundle
 
 Allow you to store your mails as a spool and send transactionnal direct mails or store it in db
 
