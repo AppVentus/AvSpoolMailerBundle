@@ -207,9 +207,12 @@ class Mail implements EmailInterface
             ->setReplyTo($this->getReplyTo())
             ->setBody($this->getBody(), 'text/html');
         $messageHeaders = $message->getHeaders();
-        foreach($this->getHeaders() as $header => $value) {
-          if (!$messageHeader->has($header)) {
-            $messageHeaders->addTextHeader($header, $value);
+        $dbHeaders = $this->getHeaders();
+        if (count($dbHeaders)) {
+          foreach($dbHeaders as $header => $value) {
+            if (!$messageHeaders->has($header)) {
+              $messageHeaders->addTextHeader($header, $value);
+            }
           }
         }
         foreach ($this->attachments as $attachment) {
@@ -444,7 +447,9 @@ class Mail implements EmailInterface
         $headerNames = $headers->listAll();
         $headersArray = [];
         foreach($headerNames as $headerName) {
-          $headersArray[$headerName] = $headers->get($headerName);
+          if (!$this->isDefaultHeader($headerName) && $headers->get($headerName) instanceof \Swift_Mime_Headers_UnstructuredHeader) {
+            $headersArray[$headerName] = $headers->get($headerName)->getValue();
+          }
         }
         $this->headers = count($headersArray)? $headersArray : null;
 
@@ -483,5 +488,26 @@ class Mail implements EmailInterface
         {
             $this->addAttachment($attachment);
         }
+    }
+
+    /**
+     * @param string
+     *
+     * @return boolean
+     */
+    private function isDefaultHeader($headerName) {
+      $defaultHeaderNames = [
+        'message-id',
+        'date',
+        'subject',
+        'from',
+        'to',
+        'reply-to',
+        'bcc',
+        'mime-version',
+        'content-type',
+        'content-transfer-encoding'
+      ];
+      return in_array($headerName, $defaultHeaderNames);
     }
 }
