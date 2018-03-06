@@ -3,9 +3,9 @@
 namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AppVentus\Awesome\SpoolMailerBundle\Entity\Mail.
@@ -418,14 +418,12 @@ class Mail implements EmailInterface
 
     public function addAttachment($attachment)
     {
-        if($attachment instanceof \Swift_Attachment)
-        {
+        if ($attachment instanceof \Swift_Attachment) {
             $swiftAttachment = $attachment;
             $attachment = new Attachment();
             $attachment->setSwiftAttachment($swiftAttachment);
         }
-        if ($attachment instanceof Attachment)
-        {
+        if ($attachment instanceof Attachment) {
             $this->attachments->add($attachment);
             $attachment->setMail($this);
         }
@@ -436,8 +434,7 @@ class Mail implements EmailInterface
      */
     public function setAttachments($attachments)
     {
-        foreach ($attachments as $attachment)
-        {
+        foreach ($attachments as $attachment) {
             $this->addAttachment($attachment);
         }
     }
