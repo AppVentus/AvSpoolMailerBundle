@@ -180,6 +180,7 @@ class Mail implements EmailInterface
         $this->setCc($message->getCc());
         $this->setBcc($message->getBcc());
         $this->setFrom($message->getFrom());
+        $this->setHeaders($message->getHeaders());
         if ($message->getReplyTo()) {
             $this->setReplyTo($message->getReplyTo());
         } else {
@@ -445,7 +446,7 @@ class Mail implements EmailInterface
         foreach($headerNames as $headerName) {
           $headersArray[$headerName] = $headers->get($headerName);
         }
-        $this->headers = $headersArray;
+        $this->headers = count($headersArray)? $headersArray : null;
 
         return $this;
     }
