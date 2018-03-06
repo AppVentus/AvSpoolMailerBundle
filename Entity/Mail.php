@@ -5,6 +5,7 @@ namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
+use \Swift_Mime_SimpleHeaderSet as HeaderSet;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -93,6 +94,13 @@ class Mail implements EmailInterface
      * @ORM\Column(name="content_type", type="text", nullable=true)
      */
     private $contentType;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="headers", type="array", nullable=true)
+     */
+    private $headers;
 
     /**
      * @var \DateTime
@@ -185,7 +193,7 @@ class Mail implements EmailInterface
     /**
      * Get message.
      *
-     * @return string
+     * @return \Swift_Message
      */
     public function getMessage()
     {
@@ -197,7 +205,12 @@ class Mail implements EmailInterface
             ->setBcc($this->getBcc())
             ->setReplyTo($this->getReplyTo())
             ->setBody($this->getBody(), 'text/html');
-
+        $messageHeaders = $message->getHeaders();
+        foreach($this->getHeaders() as $header => $value) {
+          if (!$messageHeader->has($header)) {
+            $messageHeaders->addTextHeader($header, $value);
+          }
+        }
         foreach ($this->attachments as $attachment) {
             $message
                 ->attach(\Swift_Attachment::fromPath($attachment->getPathName())
@@ -404,6 +417,35 @@ class Mail implements EmailInterface
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * get Headers.
+     *
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    /**
+     * set Headers.
+     *
+     * @param HeaderSet $headers The headers of the email
+     *
+     * @return Mail
+     */
+    public function setHeaders($headers)
+    {
+        $headerNames = $headers->listAll();
+        $headersArray = [];
+        foreach($headerNames as $headerName) {
+          $headersArray[$headerName] = $headers->get($headerName);
+        }
+        $this->headers = $headersArray;
 
         return $this;
     }
