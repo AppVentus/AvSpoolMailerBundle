@@ -5,7 +5,7 @@ namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use \Swift_Mime_SimpleHeaderSet as HeaderSet;
+use Swift_Mime_SimpleHeaderSet as HeaderSet;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 
 /**
@@ -209,11 +209,11 @@ class Mail implements EmailInterface
         $messageHeaders = $message->getHeaders();
         $dbHeaders = $this->getHeaders();
         if (count($dbHeaders)) {
-          foreach($dbHeaders as $header => $value) {
-            if (!$messageHeaders->has($header)) {
-              $messageHeaders->addTextHeader($header, $value);
+            foreach ($dbHeaders as $header => $value) {
+                if (!$messageHeaders->has($header)) {
+                    $messageHeaders->addTextHeader($header, $value);
+                }
             }
-          }
         }
         foreach ($this->attachments as $attachment) {
             $message
@@ -446,12 +446,12 @@ class Mail implements EmailInterface
     {
         $headerNames = $headers->listAll();
         $headersArray = [];
-        foreach($headerNames as $headerName) {
-          if (!$this->isDefaultHeader($headerName) && $headers->get($headerName) instanceof \Swift_Mime_Headers_UnstructuredHeader) {
-            $headersArray[$headerName] = $headers->get($headerName)->getValue();
-          }
+        foreach ($headerNames as $headerName) {
+            if (!$this->isDefaultHeader($headerName) && $headers->get($headerName) instanceof \Swift_Mime_Headers_UnstructuredHeader) {
+                $headersArray[$headerName] = $headers->get($headerName)->getValue();
+            }
         }
-        $this->headers = count($headersArray)? $headersArray : null;
+        $this->headers = count($headersArray) ? $headersArray : null;
 
         return $this;
     }
@@ -490,10 +490,11 @@ class Mail implements EmailInterface
     /**
      * @param string
      *
-     * @return boolean
+     * @return bool
      */
-    private function isDefaultHeader($headerName) {
-      $defaultHeaderNames = [
+    private function isDefaultHeader($headerName)
+    {
+        $defaultHeaderNames = [
         'message-id',
         'date',
         'subject',
@@ -503,8 +504,9 @@ class Mail implements EmailInterface
         'bcc',
         'mime-version',
         'content-type',
-        'content-transfer-encoding'
+        'content-transfer-encoding',
       ];
-      return in_array($headerName, $defaultHeaderNames);
+
+        return in_array($headerName, $defaultHeaderNames);
     }
 }
