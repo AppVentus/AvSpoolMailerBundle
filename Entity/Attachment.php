@@ -1,11 +1,9 @@
 <?php
+
 namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
-
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * AppVentus\Awesome\SpoolMailerBundle\Entity\attachment.
@@ -13,7 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="mail_attachment")
  * @ORM\Entity
  */
-class Attachment {
+class Attachment
+{
     use TimestampableEntity;
 
     /**
@@ -31,7 +30,6 @@ class Attachment {
      * @ORM\Column(name="fileName", type="string")
      */
     private $fileName;
-
 
     /**
      * @var string
@@ -65,6 +63,7 @@ class Attachment {
      * @ORM\Column(name="swift_attachment_id", type="string", nullable=true)
      */
     private $swiftAttachmentId;
+
     /**
      * @return int
      */
@@ -161,5 +160,4 @@ class Attachment {
     {
         return $this->swiftAttachmentId;
     }
-
 }

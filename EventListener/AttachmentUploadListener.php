@@ -9,9 +9,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 /**
- * Class AttachmentUploadListener
- *
- * @package AppVentus\Awesome\SpoolMailerBundle\EventListener
+ * Class AttachmentUploadListener.
  */
 class AttachmentUploadListener
 {
@@ -67,8 +65,7 @@ class AttachmentUploadListener
     {
         $entity = $args->getEntity();
 
-        if ($entity instanceof Attachment)
-        {
+        if ($entity instanceof Attachment) {
             $this->uploader->remove($entity->getFileName());
         }
     }
