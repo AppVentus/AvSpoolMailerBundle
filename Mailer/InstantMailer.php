@@ -44,7 +44,7 @@ class InstantMailer extends \Swift_Mailer
         $mail->setMessage($newMessage);
         $mail->setType('instant');
         $mail->setStatus(EmailInterface::STATUS_COMPLETE);
-        $mail->setHeaders($message->getHeaders())
+        $mail->setHeaders($message->getHeaders());
         $this->em->persist($mail);
         $this->em->flush();
   	return parent::send($newMessage, $failedRecipients);
