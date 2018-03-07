@@ -3,10 +3,10 @@
 namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
-use \Swift_Mime_SimpleHeaderSet as HeaderSet;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Swift_Mime_SimpleHeaderSet as HeaderSet;
+use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 
 /**
  * AppVentus\Awesome\SpoolMailerBundle\Entity\Mail.
@@ -444,12 +444,12 @@ class Mail implements EmailInterface
     {
         $headerNames = $headers->listAll();
         $headersArray = [];
-        foreach($headerNames as $headerName) {
-          if (!$this->isDefaultHeader($headerName) && $headers->get($headerName) instanceof \Swift_Mime_Headers_UnstructuredHeader) {
-            $headersArray[$headerName] = $headers->get($headerName)->getValue();
-          }
+        foreach ($headerNames as $headerName) {
+            if (!$this->isDefaultHeader($headerName) && $headers->get($headerName) instanceof \Swift_Mime_Headers_UnstructuredHeader) {
+                $headersArray[$headerName] = $headers->get($headerName)->getValue();
+            }
         }
-        $this->headers = count($headersArray)? $headersArray : null;
+        $this->headers = count($headersArray) ? $headersArray : null;
 
         return $this;
     }
@@ -464,14 +464,12 @@ class Mail implements EmailInterface
 
     public function addAttachment($attachment)
     {
-        if($attachment instanceof \Swift_Attachment)
-        {
+        if ($attachment instanceof \Swift_Attachment) {
             $swiftAttachment = $attachment;
             $attachment = new Attachment();
             $attachment->setSwiftAttachment($swiftAttachment);
         }
-        if ($attachment instanceof Attachment)
-        {
+        if ($attachment instanceof Attachment) {
             $this->attachments->add($attachment);
             $attachment->setMail($this);
         }
@@ -482,8 +480,7 @@ class Mail implements EmailInterface
      */
     public function setAttachments($attachments)
     {
-        foreach ($attachments as $attachment)
-        {
+        foreach ($attachments as $attachment) {
             $this->addAttachment($attachment);
         }
     }
@@ -491,10 +488,11 @@ class Mail implements EmailInterface
     /**
      * @param string
      *
-     * @return boolean
+     * @return bool
      */
-    private function isDefaultHeader($headerName) {
-      $defaultHeaderNames = [
+    private function isDefaultHeader($headerName)
+    {
+        $defaultHeaderNames = [
         'message-id',
         'date',
         'subject',
@@ -504,8 +502,9 @@ class Mail implements EmailInterface
         'bcc',
         'mime-version',
         'content-type',
-        'content-transfer-encoding'
+        'content-transfer-encoding',
       ];
-      return in_array($headerName, $defaultHeaderNames);
+
+        return in_array($headerName, $defaultHeaderNames);
     }
 }

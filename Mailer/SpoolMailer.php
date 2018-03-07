@@ -25,9 +25,9 @@ class SpoolMailer extends \Swift_Mailer
      * @param \Swift_Mime_Message $message
      * @param null                $failedRecipients
      *
-     * @return bool
-     *
      * @throws \Swift_IoException
+     *
+     * @return bool
      */
     public function send(\Swift_Mime_Message $message, &$failedRecipients = null)
     {
