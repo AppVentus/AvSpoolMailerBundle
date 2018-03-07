@@ -5,6 +5,7 @@ namespace AppVentus\Awesome\SpoolMailerBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Swift_Mime_SimpleHeaderSet as HeaderSet;
 use WhiteOctober\SwiftMailerDBBundle\EmailInterface;
 
 /**
@@ -95,6 +96,13 @@ class Mail implements EmailInterface
     private $contentType;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="headers", type="array", nullable=true)
+     */
+    private $headers;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="send_date", type="datetime", nullable=true)
@@ -172,6 +180,7 @@ class Mail implements EmailInterface
         $this->setCc($message->getCc());
         $this->setBcc($message->getBcc());
         $this->setFrom($message->getFrom());
+        $this->setHeaders($message->getHeaders());
         if ($message->getReplyTo()) {
             $this->setReplyTo($message->getReplyTo());
         } else {
@@ -185,7 +194,7 @@ class Mail implements EmailInterface
     /**
      * Get message.
      *
-     * @return string
+     * @return \Swift_Message
      */
     public function getMessage()
     {
@@ -197,7 +206,13 @@ class Mail implements EmailInterface
             ->setBcc($this->getBcc())
             ->setReplyTo($this->getReplyTo())
             ->setBody($this->getBody(), 'text/html');
-
+        $messageHeaders = $message->getHeaders();
+        $dbHeaders = $this->getHeaders();
+        foreach($dbHeaders as $header => $value) {
+          if (!$messageHeaders->has($header)) {
+            $messageHeaders->addTextHeader($header, $value);
+          }
+        }
         foreach ($this->attachments as $attachment) {
             $message
                 ->attach(\Swift_Attachment::fromPath($attachment->getPathName())
@@ -409,6 +424,37 @@ class Mail implements EmailInterface
     }
 
     /**
+     * get Headers.
+     *
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return (array)$this->headers;
+    }
+
+    /**
+     * set Headers.
+     *
+     * @param HeaderSet $headers The headers of the email
+     *
+     * @return Mail
+     */
+    public function setHeaders($headers)
+    {
+        $headerNames = $headers->listAll();
+        $headersArray = [];
+        foreach ($headerNames as $headerName) {
+            if (!$this->isDefaultHeader($headerName) && $headers->get($headerName) instanceof \Swift_Mime_Headers_UnstructuredHeader) {
+                $headersArray[$headerName] = $headers->get($headerName)->getValue();
+            }
+        }
+        $this->headers = count($headersArray) ? $headersArray : null;
+
+        return $this;
+    }
+
+    /**
      * @return \AppVentus\Awesome\SpoolMailerBundle\Entity\Attachment[]
      */
     public function getAttachments()
@@ -437,5 +483,28 @@ class Mail implements EmailInterface
         foreach ($attachments as $attachment) {
             $this->addAttachment($attachment);
         }
+    }
+
+    /**
+     * @param string
+     *
+     * @return bool
+     */
+    private function isDefaultHeader($headerName)
+    {
+        $defaultHeaderNames = [
+        'message-id',
+        'date',
+        'subject',
+        'from',
+        'to',
+        'reply-to',
+        'bcc',
+        'mime-version',
+        'content-type',
+        'content-transfer-encoding',
+      ];
+
+        return in_array($headerName, $defaultHeaderNames);
     }
 }
