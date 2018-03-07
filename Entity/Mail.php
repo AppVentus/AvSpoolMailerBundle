@@ -208,10 +208,10 @@ class Mail implements EmailInterface
             ->setBody($this->getBody(), 'text/html');
         $messageHeaders = $message->getHeaders();
         $dbHeaders = $this->getHeaders();
-        foreach($dbHeaders as $header => $value) {
-          if (!$messageHeaders->has($header)) {
-            $messageHeaders->addTextHeader($header, $value);
-          }
+        foreach ($dbHeaders as $header => $value) {
+            if (!$messageHeaders->has($header)) {
+                $messageHeaders->addTextHeader($header, $value);
+            }
         }
         foreach ($this->attachments as $attachment) {
             $message
@@ -430,7 +430,7 @@ class Mail implements EmailInterface
      */
     public function getHeaders()
     {
-        return (array)$this->headers;
+        return (array) $this->headers;
     }
 
     /**
