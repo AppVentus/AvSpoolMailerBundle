@@ -1,5 +1,5 @@
 {
-    "name": "TristanPouliquen/spoolmailerbundle",
+    "name": "appventus/spoolmailerbundle",
     "description": "Database spool emails",
     "keywords": ["swiftmailer", "doctrine", "spool"],
     "type": "symfony-bundle",
